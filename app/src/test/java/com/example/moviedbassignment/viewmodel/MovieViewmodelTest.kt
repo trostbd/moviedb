@@ -1,5 +1,6 @@
 package com.example.moviedbassignment.viewmodel
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.example.moviedbassignment.helpers.RetrofitHelper
 import com.example.moviedbassignment.model.Movie
@@ -10,6 +11,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 class MovieViewmodelTest {
@@ -25,18 +27,11 @@ class MovieViewmodelTest {
     @Mock
     lateinit var helper: RetrofitHelper
 
-    @Mock
-    lateinit var observerMovieList: Observer<MovieList>
-
     @Test
     fun getMovieListData() {
-    }
-
-    @Test
-    fun getMovieList() {
-    }
-
-    @Test
-    fun getRetrofitHelper() {
+        val livedata = MutableLiveData<MovieList>()
+        Mockito.`when`(helper.retrieveMovieList()).thenReturn(livedata)
+        viewmodel.getMovieList()
+        verify(viewmodel.movieListData.value)?.equals(livedata.value)
     }
 }
